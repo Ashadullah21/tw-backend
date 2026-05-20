@@ -114,9 +114,36 @@
             </table>
         </div>
         
-        @if($downloadLogs->hasPages())
-            <div class="card-footer d-flex justify-content-center py-4 bg-transparent border-0">
-                {{ $downloadLogs->links('pagination::bootstrap-5') }}
+        @if($downloadLogs->isNotEmpty())
+            <div class="card-footer d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 py-4 bg-transparent border-0">
+                <div class="d-flex flex-wrap align-items-center gap-3">
+                    <!-- Entries per page selector -->
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="small text-secondary">Show</span>
+                        <select onchange="window.location.href = this.value;" class="form-select form-select-sm text-white" style="width: auto; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; font-weight: 600; padding: 4px 28px 4px 12px; cursor: pointer;">
+                            @foreach([10, 20, 50, 100] as $size)
+                                <option value="{{ request()->fullUrlWithQuery(['per_page' => $size, 'page' => 1]) }}" {{ $downloadLogs->perPage() == $size ? 'selected' : '' }} style="background-color: var(--card-bg); color: var(--text-primary);">
+                                    {{ $size }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <span class="small text-secondary">entries</span>
+                    </div>
+                    
+                    <!-- Total count stats -->
+                    <span class="small text-secondary">
+                        Showing <span class="fw-semibold text-white">{{ $downloadLogs->firstItem() ?? 0 }}</span> to 
+                        <span class="fw-semibold text-white">{{ $downloadLogs->lastItem() ?? 0 }}</span> of 
+                        <span class="fw-semibold text-white">{{ $downloadLogs->total() }}</span> entries
+                    </span>
+                </div>
+
+                <!-- Page navigations -->
+                @if($downloadLogs->hasPages())
+                    <div class="d-flex justify-content-center m-0">
+                        {{ $downloadLogs->links('pagination::bootstrap-5') }}
+                    </div>
+                @endif
             </div>
         @endif
     </div>

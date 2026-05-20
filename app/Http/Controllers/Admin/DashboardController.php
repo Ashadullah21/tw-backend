@@ -16,10 +16,17 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        // Paginate download logs, latest first (20 per page)
+        // Dynamic entries per page selection (whitelisted choices for safety)
+        $perPage = request()->integer('per_page', 20);
+        if (!in_array($perPage, [10, 20, 50, 100])) {
+            $perPage = 20;
+        }
+
+        // Paginate download logs, latest first (with query string appended)
         $downloadLogs = DB::table('download_logs')
             ->orderBy('created_at', 'desc')
-            ->paginate(20);
+            ->paginate($perPage)
+            ->withQueryString();
 
         // Get top 20 rows from user_activity_summary ordered by total_requests descending
         $userActivities = UserActivitySummary::orderBy('total_requests', 'desc')
