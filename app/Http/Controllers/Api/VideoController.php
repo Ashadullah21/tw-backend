@@ -58,7 +58,7 @@ class VideoController extends Controller
 
             return response()->json([
                 'error'   => 'Extraction failed',
-                'message' => $e->getMessage(),
+                'message' => 'Failed to extract video. Please ensure the URL is valid, public, and contains a video.',
             ], 422);
 
         } catch (\Exception $e) {
