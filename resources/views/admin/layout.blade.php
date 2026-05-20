@@ -7,25 +7,47 @@
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --sidebar-bg: #111827;
-            --card-bg: #111827;
-            --text-color: #f3f4f6;
-            --border-color: #1f2937;
-            --active-color: #3b82f6;
+            --bg-color: #060913;
+            --sidebar-bg: #0b0f19;
+            --card-bg: #0f1629;
+            --text-primary: #f0f4ff;
+            --text-secondary: #8b9abf;
+            --text-muted: #5a6a8a;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --brand-primary: #1d9bf0;
+            --brand-primary-hover: #1585d2;
+            --brand-glow: rgba(29, 155, 240, 0.15);
+            --transition-speed: 0.25s;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-color);
+            color: var(--text-primary);
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
-            display: flex;
             overflow-x: hidden;
+            background-image: 
+                radial-gradient(ellipse 60% 40% at 50% -10%, rgba(29, 155, 240, 0.08) 0%, transparent 60%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         /* ── Sidebar Styling ────────────────────────────────────────── */
@@ -40,31 +62,33 @@
             bottom: 0;
             left: 0;
             z-index: 100;
-            padding: 24px;
+            padding: 30px 24px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .sidebar-brand {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 1.25rem;
-            font-weight: 700;
+            font-size: 1.2rem;
+            font-weight: 800;
             color: #ffffff;
             text-decoration: none;
-            margin-bottom: 32px;
+            margin-bottom: 35px;
             padding-left: 8px;
+            letter-spacing: -0.5px;
         }
 
         .sidebar-brand-icon {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
-            background-color: #2563eb;
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--brand-primary), #1570cf);
             color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(29, 155, 240, 0.3);
         }
 
         .sidebar-menu {
@@ -81,22 +105,26 @@
             align-items: center;
             justify-content: space-between;
             padding: 12px 16px;
-            color: #9ca3af;
+            color: var(--text-secondary);
             text-decoration: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            transition: all var(--transition-speed) ease;
+            border: 1px solid transparent;
         }
 
         .sidebar-link:hover {
             color: #ffffff;
-            background-color: #1f2937;
+            background-color: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.02);
         }
 
         .sidebar-link.active {
             color: #ffffff;
-            background-color: #2563eb;
+            background: linear-gradient(135deg, var(--brand-primary), #1570cf);
+            box-shadow: 0 6px 18px rgba(29, 155, 240, 0.25);
+            border-color: transparent;
         }
 
         .sidebar-link-inner {
@@ -108,23 +136,26 @@
         .sidebar-footer {
             margin-top: auto;
             border-top: 1px solid var(--border-color);
-            padding-top: 20px;
+            padding-top: 24px;
         }
 
         /* ── Main Layout Wrapper ────────────────────────────────────── */
         .main-wrapper {
             margin-left: 280px;
-            flex-grow: 1;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+            min-width: 0;
         }
 
         .top-navbar {
-            height: 72px;
-            background-color: rgba(17, 24, 39, 0.7);
+            height: 76px;
+            background-color: rgba(6, 9, 19, 0.7);
             border-bottom: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -136,22 +167,24 @@
 
         .page-title {
             font-size: 1.25rem;
-            font-weight: 700;
+            font-weight: 800;
             color: #ffffff;
             margin: 0;
+            letter-spacing: -0.5px;
         }
 
         .admin-badge {
-            background-color: rgba(16, 185, 129, 0.1);
+            background-color: rgba(16, 185, 129, 0.08);
             color: #10b981;
             border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 30px;
             font-size: 0.8rem;
-            font-weight: 600;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
         }
 
         .admin-badge::before {
@@ -161,6 +194,7 @@
             height: 8px;
             background-color: #10b981;
             border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
         }
 
         .content-container {
@@ -168,76 +202,170 @@
             padding: 40px;
         }
 
-        /* Common component aesthetics */
+        /* ── Common Card Styling ────────────────────────────────────── */
         .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
+            background-color: var(--card-bg) !important;
+            border: 1px solid var(--border-color) !important;
+            border-radius: 20px !important;
             margin-bottom: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
 
         .card-header {
-            background-color: rgba(255, 255, 255, 0.02);
-            border-bottom: 1px solid var(--border-color);
-            padding: 18px 24px;
-            font-weight: 600;
-            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.01) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            padding: 20px 24px !important;
+            font-weight: 700 !important;
+            color: #ffffff !important;
+            letter-spacing: -0.3px;
         }
 
         .table {
-            color: #e5e7eb;
+            color: var(--text-secondary);
             margin-bottom: 0;
         }
 
         .table th {
-            color: #9ca3af;
-            border-bottom: 2px solid var(--border-color);
-            font-weight: 600;
-            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--border-color) !important;
+            font-weight: 700;
+            font-size: 0.78rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 14px 20px;
+            letter-spacing: 0.08em;
+            padding: 16px 24px;
+            background-color: transparent !important;
         }
 
         .table td {
-            border-bottom: 1px solid var(--border-color);
-            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-color) !important;
+            padding: 16px 24px;
             font-size: 0.9rem;
             vertical-align: middle;
+            background-color: transparent !important;
         }
 
         .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(255, 255, 255, 0.01);
+            background-color: rgba(255, 255, 255, 0.007) !important;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.02) !important;
+            color: #ffffff;
         }
 
-        /* Pagination overrides */
+        /* ── Pagination Styling ─────────────────────────────────────── */
         .pagination {
             margin: 0;
+            gap: 6px;
         }
 
         .page-link {
-            background-color: #111827;
-            border-color: #1f2937;
-            color: #9ca3af;
-            padding: 8px 16px;
+            background-color: rgba(255, 255, 255, 0.02) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-secondary) !important;
+            padding: 10px 18px !important;
+            border-radius: 10px !important;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all var(--transition-speed) ease;
         }
 
         .page-link:hover {
-            background-color: #1f2937;
-            border-color: #3b82f6;
-            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.06) !important;
+            border-color: var(--brand-primary) !important;
+            color: #ffffff !important;
+            transform: translateY(-1px);
         }
 
         .page-item.active .page-link {
-            background-color: #2563eb;
-            border-color: #2563eb;
-            color: #ffffff;
+            background: linear-gradient(135deg, var(--brand-primary), #1570cf) !important;
+            border-color: transparent !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(29, 155, 240, 0.25);
         }
 
         .page-item.disabled .page-link {
-            background-color: #0b0f19;
-            border-color: #1f2937;
-            color: #4b5563;
+            background-color: transparent !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-muted) !important;
+            opacity: 0.4;
+        }
+
+        /* ── Hamburger / Mobile Navigation elements ────────────────── */
+        .hamburger-btn {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .hamburger-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--brand-primary);
+        }
+
+        .sidebar-overlay {
+            display: none;
+        }
+
+        /* ── Media Queries ─────────────────────────────────────────── */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 1050;
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+                box-shadow: 15px 0 40px rgba(0, 0, 0, 0.75);
+            }
+
+            .main-wrapper {
+                margin-left: 0 !important;
+            }
+
+            .top-navbar {
+                padding: 0 20px;
+            }
+
+            .hamburger-btn {
+                display: inline-flex;
+            }
+
+            .sidebar-overlay {
+                display: block;
+                position: fixed;
+                inset: 0;
+                background-color: rgba(0, 0, 0, 0.6);
+                backdrop-filter: blur(5px);
+                -webkit-backdrop-filter: blur(5px);
+                z-index: 1040;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+            }
+
+            .sidebar-overlay.show {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .content-container {
+                padding: 24px 16px;
+            }
+            
+            .top-navbar {
+                height: 70px;
+            }
         }
     </style>
 </head>
@@ -247,6 +375,9 @@
         // Fetch unread count inline to ensure layout stays fully self-contained across all controller calls
         $unreadMessagesCountGlobal = \App\Models\ContactMessage::where('is_read', false)->count();
     @endphp
+
+    <!-- Mobile Drawer Overlay Backdrop -->
+    <div class="sidebar-overlay"></div>
 
     <!-- ── Sidebar ──────────────────────────────────────────────────── -->
     <aside class="sidebar" role="navigation">
@@ -279,7 +410,7 @@
                         <span>Contact Messages</span>
                     </div>
                     @if($unreadMessagesCountGlobal > 0)
-                        <span class="badge bg-danger rounded-pill">{{ $unreadMessagesCountGlobal }}</span>
+                        <span class="badge bg-danger rounded-pill px-2.5 py-1">{{ $unreadMessagesCountGlobal }}</span>
                     @endif
                 </a>
             </li>
@@ -304,7 +435,14 @@
     <!-- ── Main Layout Wrapper ────────────────────────────────────── -->
     <div class="main-wrapper">
         <header class="top-navbar">
-            <h2 class="page-title">@yield('page_header', 'System Hub')</h2>
+            <div class="d-flex align-items-center gap-3">
+                <button class="hamburger-btn" id="sidebar-toggle" aria-label="Toggle Navigation Sidebar" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                </button>
+                <h2 class="page-title">@yield('page_header', 'System Hub')</h2>
+            </div>
             <div class="admin-badge">Admin Session Active</div>
         </header>
 
@@ -315,5 +453,24 @@
 
     <!-- Bootstrap 5 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Sidebar Responsive Menu Toggle Handler -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('sidebar-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            
+            if (toggleBtn && sidebar && overlay) {
+                const toggleSidebar = () => {
+                    sidebar.classList.toggle('show');
+                    overlay.classList.toggle('show');
+                };
+
+                toggleBtn.addEventListener('click', toggleSidebar);
+                overlay.addEventListener('click', toggleSidebar);
+            }
+        });
+    </script>
 </body>
 </html>

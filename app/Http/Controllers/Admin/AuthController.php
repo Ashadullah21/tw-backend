@@ -30,7 +30,7 @@ class AuthController extends Controller
     {
         // Validate incoming credentials
         $credentials = $request->validate([
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
@@ -41,7 +41,7 @@ class AuthController extends Controller
         if ($credentials['email'] === $adminEmail && $credentials['password'] === $adminPassword) {
             // Set session indicator to authenticate admin manually
             session(['admin_logged_in' => true]);
-            
+
             // Regenerate session to prevent session fixation attacks
             $request->session()->regenerate();
 
