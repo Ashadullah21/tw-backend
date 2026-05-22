@@ -27,7 +27,7 @@ class ExtractVideoRequest extends FormRequest
                 'string',
                 'max:2048',
                 // Must be a valid Twitter or X URL
-                'regex:/^https?:\/\/(www\.)?(twitter\.com|x\.com)\/[a-zA-Z0-9_]+\/status\/\d+(?:\/[a-zA-Z0-9_\-\.\?\&%\=]*)?$/i',
+                'regex:/^https?:\/\/(www\.)?(twitter\.com|x\.com)\/[a-zA-Z0-9_]+\/status\/\d+(?:\/?[a-zA-Z0-9_\-\.\?\&%\=]*)?$/i',
             ],
         ];
     }
