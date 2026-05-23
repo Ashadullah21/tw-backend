@@ -80,51 +80,86 @@ class VideoController extends Controller
 
     /**
      * Proxy and stream external video URLs to force an instant browser download dialog.
+     * Optionally transcode to MP3 audio-only on the fly if format=mp3 is passed.
      *
-     * GET /api/download?url=xxx&title=yyy
+     * GET /api/download?url=xxx&title=yyy&format=mp4|mp3
      */
     public function download(Request $request)
     {
-        $url   = $request->query('url');
-        $title = $request->query('title', 'twitter-video');
+        $url    = $request->query('url');
+        $title  = $request->query('title', 'twitter-video');
+        $format = strtolower($request->query('format', 'mp4'));
 
         if (empty($url)) {
             abort(400, 'Missing url parameter');
         }
 
-        // Clean filename (strip extension if present and append .mp4)
+        // Clean filename (strip extension if present and append appropriate extension)
         $filename = pathinfo($title, PATHINFO_FILENAME);
         $filename = preg_replace('/[^a-zA-Z0-9_-]/', '_', $filename);
-        $filename = ($filename ?: 'video') . '.mp4';
 
-        // Set headers for download
-        $headers = [
-            'Content-Type'        => 'video/mp4',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-        ];
+        if ($format === 'mp3') {
+            $filename = ($filename ?: 'audio') . '.mp3';
+            
+            // Set headers for audio download
+            $headers = [
+                'Content-Type'        => 'audio/mpeg',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            ];
 
-        return response()->streamDownload(function () use ($url) {
-            $context = stream_context_create([
-                'http' => [
-                    'header'          => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36\r\n",
-                    'follow_location' => true,
-                    'max_redirects'   => 5,
-                ],
-                'ssl' => [
-                    'verify_peer'      => false,
-                    'verify_peer_name' => false,
-                ]
-            ]);
+            return response()->streamDownload(function () use ($url) {
+                // Use ffmpeg to stream from the MP4 URL and transcode to MP3 on the fly.
+                // -loglevel quiet hides ffmpeg terminal output from the stream.
+                // -vn disables video stream.
+                // -acodec libmp3lame encodes the audio to MP3 format.
+                // -f mp3 specifies output format.
+                // - redirects stdout.
+                $escapedUrl = escapeshellarg($url);
+                $command = "ffmpeg -loglevel quiet -i {$escapedUrl} -vn -acodec libmp3lame -f mp3 -";
 
-            $stream = fopen($url, 'r', false, $context);
+                $stream = popen($command, 'r');
 
-            if ($stream) {
-                while (!feof($stream)) {
-                    echo fread($stream, 1024 * 8); // Stream in 8KB chunks
-                    flush();
+                if ($stream) {
+                    while (!feof($stream)) {
+                        echo fread($stream, 1024 * 8); // Stream in 8KB chunks
+                        flush();
+                    }
+                    pclose($stream);
                 }
-                fclose($stream);
-            }
-        }, $filename, $headers);
+            }, $filename, $headers);
+
+        } else {
+            $filename = ($filename ?: 'video') . '.mp4';
+
+            // Set headers for video download
+            $headers = [
+                'Content-Type'        => 'video/mp4',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            ];
+
+            return response()->streamDownload(function () use ($url) {
+                $context = stream_context_create([
+                    'http' => [
+                        'header'          => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36\r\n",
+                        'follow_location' => true,
+                        'max_redirects'   => 5,
+                    ],
+                    'ssl' => [
+                        'verify_peer'      => false,
+                        'verify_peer_name' => false,
+                    ]
+                ]);
+
+                $stream = fopen($url, 'r', false, $context);
+
+                if ($stream) {
+                    while (!feof($stream)) {
+                        echo fread($stream, 1024 * 8); // Stream in 8KB chunks
+                        flush();
+                    }
+                    fclose($stream);
+                }
+            }, $filename, $headers);
+        }
     }
 }
