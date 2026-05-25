@@ -317,6 +317,124 @@
             display: none;
         }
 
+        /* ── Premium Forms & Filters Styling ── */
+        .form-control, .form-select {
+            background-color: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            color: #ffffff !important;
+            border-radius: 10px !important;
+            font-size: 0.9rem !important;
+            height: 44px !important;
+            transition: all var(--transition-speed) ease !important;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(255, 255, 255, 0.06) !important;
+            border-color: var(--brand-primary) !important;
+            box-shadow: 0 0 10px rgba(29, 155, 240, 0.2) !important;
+            color: #ffffff !important;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.35) !important;
+        }
+        .form-control::-webkit-input-placeholder {
+            color: rgba(255, 255, 255, 0.35) !important;
+        }
+        .form-control::-moz-placeholder {
+            color: rgba(255, 255, 255, 0.35) !important;
+        }
+
+        .input-group {
+            border-radius: 10px !important;
+            overflow: hidden !important;
+        }
+
+        .input-group-text {
+            background-color: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            border-right: none !important;
+            color: var(--text-secondary) !important;
+            border-top-left-radius: 10px !important;
+            border-bottom-left-radius: 10px !important;
+            height: 44px !important;
+            padding-left: 16px !important;
+            padding-right: 12px !important;
+        }
+
+        .input-group .form-control {
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+            border-left: none !important;
+        }
+
+        .form-select option {
+            background-color: var(--card-bg) !important;
+            color: #ffffff !important;
+        }
+
+        /* Standardized Action Buttons */
+        .btn-outline-primary {
+            border-color: rgba(29, 155, 240, 0.4) !important;
+            color: var(--brand-primary) !important;
+            border-radius: 10px !important;
+            height: 44px !important;
+            padding: 0 20px !important;
+            font-weight: 700 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all var(--transition-speed) ease !important;
+        }
+
+        .btn-outline-primary:hover {
+            background: linear-gradient(135deg, var(--brand-primary), #1570cf) !important;
+            border-color: transparent !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(29, 155, 240, 0.25) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        .btn-ghost {
+            color: var(--text-secondary) !important;
+            border: 1px solid transparent !important;
+            background-color: transparent !important;
+            border-radius: 10px !important;
+            height: 44px !important;
+            padding: 0 20px !important;
+            font-weight: 700 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all var(--transition-speed) ease !important;
+        }
+
+        .btn-ghost:hover {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, #10b981, #047857) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 10px !important;
+            height: 44px !important;
+            padding: 0 20px !important;
+            font-weight: 700 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2) !important;
+            transition: all var(--transition-speed) ease !important;
+        }
+
+        .btn-export:hover {
+            transform: translateY(-1px) !important;
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.35) !important;
+            filter: brightness(1.1) !important;
+        }
+
         /* ── Media Queries ─────────────────────────────────────────── */
         @media (max-width: 991.98px) {
             .sidebar {
@@ -412,6 +530,39 @@
                     @if($unreadMessagesCountGlobal > 0)
                         <span class="badge bg-danger rounded-pill px-2.5 py-1">{{ $unreadMessagesCountGlobal }}</span>
                     @endif
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.mp3_downloads') }}" class="sidebar-link {{ request()->routeIs('admin.mp3_downloads') ? 'active' : '' }}">
+                    <div class="sidebar-link-inner">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13s1.12-2 2.5-2 2.5.895 2.5 2zm9-2c0 1.105-1.12 2-2.5 2S10 12.105 10 11s1.12-2 2.5-2 2.5.895 2.5 2z"/>
+                            <path fill-rule="evenodd" d="M14 11V2h1v9h-1zM6 3v10H5V3h1z"/>
+                            <path d="M5 2.905a1 1 0 0 1 .9-.975l8-1.22A1 1 0 0 1 15 1.705V4L5 5.5V2.905z"/>
+                        </svg>
+                        <span>MP3 Downloads</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.failed_downloads') }}" class="sidebar-link {{ request()->routeIs('admin.failed_downloads') ? 'active' : '' }}">
+                    <div class="sidebar-link-inner">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="color: #ff4b4b;">
+                            <path d="M8 15a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0 1a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"/>
+                            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                        </svg>
+                        <span>Failed Attempts</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.faqs.index') }}" class="sidebar-link {{ request()->routeIs('admin.faqs.*') ? 'active' : '' }}">
+                    <div class="sidebar-link-inner">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M16 8a8 8 0 1 1 0-16 8 8 0 0 1 0 16zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"/>
+                        </svg>
+                        <span>Manage FAQs</span>
+                    </div>
                 </a>
             </li>
         </ul>

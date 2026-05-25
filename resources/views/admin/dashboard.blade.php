@@ -52,12 +52,102 @@
         </div>
     </div>
 
+    <!-- ── Stats Download success/failed Row ───────────────────────── -->
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-md-6">
+            <div class="card border-0 p-4 h-100" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.03)) !important; box-shadow: 0 4px 20px rgba(16, 185, 129, 0.05);">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <p class="small text-uppercase fw-bold mb-0" style="letter-spacing: 0.08em; color: rgba(255, 255, 255, 0.55) !important;">Successful Downloads</p>
+                    <div class="p-2 rounded-3 bg-success bg-opacity-10 text-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="mb-1 fw-extrabold text-success" style="letter-spacing: -0.5px;">{{ $successDownloadsCount }}</h3>
+                <p class="small text-secondary mb-0">Total successful video extraction queries</p>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card border-0 p-4 h-100" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.03)) !important; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.05);">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <p class="small text-uppercase fw-bold mb-0" style="letter-spacing: 0.08em; color: rgba(255, 255, 255, 0.55) !important;">Failed Attempts</p>
+                    <div class="p-2 rounded-3 bg-danger bg-opacity-10 text-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="mb-1 fw-extrabold text-danger" style="letter-spacing: -0.5px;">{{ $failedDownloadsCount }}</h3>
+                <p class="small text-secondary mb-0">Total failed or invalid URL extraction attempts</p>
+            </div>
+        </div>
+    </div>
+
     <!-- ── SECTION A: Download Logs ────────────────────────────────── -->
     <div class="card mb-5">
         <div class="card-header d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
             <span class="fs-5 fw-bold">Detailed Extraction Logs (Paginated)</span>
             <span class="badge bg-secondary rounded-pill px-3 py-1.5" style="background-color: rgba(255, 255, 255, 0.08) !important; color: #a5b4fc; border: 1px solid rgba(255, 255, 255, 0.05);">{{ $downloadLogs->total() }} total entries</span>
         </div>
+        
+        <!-- ── Search & Filter Controls ── -->
+        <div class="p-4 border-bottom border-subtle" style="background-color: rgba(255, 255, 255, 0.005);">
+            <form method="GET" action="" class="row g-3 align-items-center">
+                <!-- Retain Section B's search parameter if active -->
+                @if(request('activity_search'))
+                    <input type="hidden" name="activity_search" value="{{ request('activity_search') }}">
+                @endif
+
+                <!-- Search field -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="input-group">
+                        <span class="input-group-text text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg>
+                        </span>
+                        <input type="text" name="search" class="form-control text-white" placeholder="Search logs by URL, IP, Referer..." value="{{ request('search') }}">
+                    </div>
+                </div>
+
+                <!-- Status Filter -->
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                    <select name="status" class="form-select text-white" style="cursor: pointer;">
+                        <option value="" {{ request('status') === '' ? 'selected' : '' }}>All Extraction Statuses</option>
+                        <option value="success" {{ request('status') === 'success' ? 'selected' : '' }}>Success</option>
+                        <option value="failed" {{ request('status') === 'failed' ? 'selected' : '' }}>Failed</option>
+                    </select>
+                </div>
+
+                <!-- Entries Per Page -->
+                <div class="col-12 col-sm-6 col-md-3 col-lg-2">
+                    <select name="per_page" class="form-select text-white" onchange="this.form.submit();" style="cursor: pointer;">
+                        @foreach([10, 20, 50, 100] as $size)
+                            <option value="{{ $size }}" {{ request('per_page', 20) == $size ? 'selected' : '' }}>{{ $size }} entries</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="col-12 col-md-12 col-lg-3 d-flex gap-2 justify-content-lg-end justify-content-start align-items-center flex-wrap mt-md-3 mt-lg-0">
+                    <button type="submit" class="btn btn-outline-primary px-3 fw-bold">Apply</button>
+                    @if(request()->has('search') || request()->has('status'))
+                        <a href="{{ route('admin.dashboard', request()->only('activity_search')) }}" class="btn btn-ghost px-3">Reset</a>
+                    @endif
+                    <a href="{{ route('admin.export.download_logs', request()->query()) }}" class="btn btn-export px-3 fw-bold d-inline-flex align-items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                        <span>Export CSV</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+
         <div class="table-responsive">
             <table class="table table-striped table-hover align-middle mb-0">
                 <thead>
@@ -122,7 +212,7 @@
                         <span class="small text-secondary">Show</span>
                         <select onchange="window.location.href = this.value;" class="form-select form-select-sm text-white" style="width: auto; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; font-weight: 600; padding: 4px 28px 4px 12px; cursor: pointer;">
                             @foreach([10, 20, 50, 100] as $size)
-                                <option value="{{ request()->fullUrlWithQuery(['per_page' => $size, 'page' => 1]) }}" {{ $downloadLogs->perPage() == $size ? 'selected' : '' }} style="background-color: var(--card-bg); color: var(--text-primary);">
+                                <option value="{{ request()->fullUrlWithQuery(['per_page' => $size, 'logs_page' => 1]) }}" {{ $downloadLogs->perPage() == $size ? 'selected' : '' }} style="background-color: var(--card-bg); color: var(--text-primary);">
                                     {{ $size }}
                                 </option>
                             @endforeach
@@ -153,6 +243,48 @@
         <div class="card-header">
             <span class="fs-5 fw-bold">Top 20 User Activity Profiles (by Requests)</span>
         </div>
+
+        <!-- ── Search & Export for Section B ── -->
+        <div class="p-4 border-bottom border-subtle" style="background-color: rgba(255, 255, 255, 0.005);">
+            <form method="GET" action="" class="row g-3 align-items-center">
+                <!-- Retain Section A's search params if active -->
+                @if(request('search'))
+                    <input type="hidden" name="search" value="{{ request('search') }}">
+                @endif
+                @if(request('status'))
+                    <input type="hidden" name="status" value="{{ request('status') }}">
+                @endif
+                @if(request('per_page'))
+                    <input type="hidden" name="per_page" value="{{ request('per_page') }}">
+                @endif
+
+                <div class="col-12 col-md-7 col-lg-8">
+                    <div class="input-group">
+                        <span class="input-group-text text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg>
+                        </span>
+                        <input type="text" name="activity_search" class="form-control text-white" placeholder="Search activities by Client IP..." value="{{ request('activity_search') }}">
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-5 col-lg-4 d-flex gap-2 justify-content-md-end justify-content-start align-items-center flex-wrap mt-md-0">
+                    <button type="submit" class="btn btn-outline-primary px-3 fw-bold">Apply</button>
+                    @if(request()->has('activity_search'))
+                        <a href="{{ route('admin.dashboard', request()->only('search', 'status', 'per_page')) }}" class="btn btn-ghost px-3">Reset</a>
+                    @endif
+                    <a href="{{ route('admin.export.user_activities', request()->query()) }}" class="btn btn-export px-3 fw-bold d-inline-flex align-items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                        <span>Export CSV</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+
         <div class="table-responsive">
             <table class="table table-striped table-hover align-middle mb-0">
                 <thead>

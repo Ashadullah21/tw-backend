@@ -222,7 +222,7 @@
                     </svg>
                 </div>
                 <h1 class="brand-title">TW Downloader</h1>
-                <p class="brand-subtitle">Admin Security Portal</p>
+                <p class="brand-subtitle">Admin Portal</p>
             </div>
 
             <!-- Validation Error Banner -->
@@ -245,7 +245,7 @@
                         class="form-control" 
                         id="email" 
                         name="email" 
-                        placeholder="admin@example.com" 
+                        placeholder="your email" 
                         value="{{ old('email') }}" 
                         required 
                         autocomplete="email" 
@@ -254,7 +254,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="password" class="form-label">Security Password</label>
+                    <label for="password" class="form-label">Password</label>
                     <input 
                         type="password" 
                         class="form-control" 

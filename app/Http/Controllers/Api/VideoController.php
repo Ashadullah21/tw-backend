@@ -47,6 +47,17 @@ class VideoController extends Controller
             return response()->json($videoInfo, 200);
 
         } catch (\RuntimeException $e) {
+            // Log to detailed failed reasons table
+            try {
+                \App\Models\FailedDownload::create([
+                    'url'        => $url,
+                    'ip_address' => $ip,
+                    'reason'     => substr($e->getMessage(), 0, 1000),
+                ]);
+            } catch (\Exception $dbEx) {
+                \Illuminate\Support\Facades\Log::error('Failed to log detailed download failure: ' . $dbEx->getMessage());
+            }
+
             // Log failed extraction with details and summaries via the ActivityLoggerService
             $this->activityLoggerService->log(
                 ip: $ip,
@@ -62,6 +73,17 @@ class VideoController extends Controller
             ], 422);
 
         } catch (\Exception $e) {
+            // Log to detailed failed reasons table
+            try {
+                \App\Models\FailedDownload::create([
+                    'url'        => $url,
+                    'ip_address' => $ip,
+                    'reason'     => substr($e->getMessage(), 0, 1000),
+                ]);
+            } catch (\Exception $dbEx) {
+                \Illuminate\Support\Facades\Log::error('Failed to log detailed download failure: ' . $dbEx->getMessage());
+            }
+
             // Catch-all for unexpected errors
             $this->activityLoggerService->log(
                 ip: $ip,
@@ -101,6 +123,19 @@ class VideoController extends Controller
         if ($format === 'mp3') {
             $filename = ($filename ?: 'audio') . '.mp3';
             
+            // Log this MP3 download in our database
+            try {
+                \App\Models\Mp3Download::create([
+                    'url'        => $url,
+                    'title'      => $title,
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent() ? substr($request->userAgent(), 0, 500) : null,
+                    'referer'    => $request->header('referer') ? substr($request->header('referer'), 0, 500) : null,
+                ]);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Failed to log MP3 download: ' . $e->getMessage());
+            }
+
             // Set headers for audio download
             $headers = [
                 'Content-Type'        => 'audio/mpeg',

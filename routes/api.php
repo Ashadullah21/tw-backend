@@ -25,3 +25,6 @@ Route::get('/download', [VideoController::class, 'download']);
 
 // Contact message submissions from frontend
 Route::post('/contact', [ContactController::class, 'store'])->name('api.contact.store');
+
+// FAQs public endpoint for frontend rendering
+Route::get('/faqs', [\App\Http\Controllers\Admin\FaqController::class, 'apiIndex'])->name('api.faqs.index');
